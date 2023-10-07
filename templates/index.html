@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YouTube Audio Summary</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .loading {
+            display: none; /* Initially hide the loading animation */
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("form").submit(function (e) {
+                e.preventDefault();
+                $(".loading").show(); 
+                $("#summary").hide();
+                $.ajax({
+                    type: "POST",
+                    url: "/",
+                    data: $("form").serialize(),
+                    success: function (data) {
+                        $("#summary").show();
+                        if ($("#summary_choice").val() === "1") {
+                            displayAsTable(data.summary);
+                        } else {
+                            displayAsParagraph(data.summary);
+                        }
+                        $(".loading").hide(); 
+                    }
+                });
+            });
+        });
+
+        function displayAsTable(text) {
+            var bulletPoints = text.split('\n');
+            
+            var list = "<ul>";
+            for (var i = 0; i < bulletPoints.length; i++) {
+                list += "<li>" + bulletPoints[i] + "</li>";
+                if (i == 0) {
+                    list += "<br>"
+                }
+            }
+            list += "</ul>";
+            
+            $("#summary").html(list);
+        }
+
+        function displayAsParagraph(text) {
+            $("#summary").html("<p>" + text + "</p>");
+        }
+    </script>
+</head>
+<body class="text-center"> 
+    <h1 class="my-4 text-2xl">YouTube Audio Summary</h1>
+    <form method="POST" class="my-4">
+        <label for="youtube_url">YouTube URL:</label>
+        <input type="text" id="youtube_url" name="youtube_url" required class="border border-gray-300 rounded-md p-2 mr-2">
+        <label for="summary_choice">Summary Type:</label>
+        <select id="summary_choice" name="summary_choice" class="border border-gray-300 rounded-md p-2">
+            <option value="0">Default</option>
+            <option value="1">Bullet Points</option>
+        </select><br><br>
+        <input type="submit" value="Generate Summary" class="bg-blue-500 text-white rounded-md p-2 ml-2">
+    </form><br class="loading"><br class="loading">
+    <div class="loading">
+        <div class="flex justify-center items-center"> 
+            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
+        </div>
+    </div>
+    <div id="summary" class="m-8 border border-gray-300 rounded-md p-4">
+        <div class="text-left">
+        </div>
+    </div>
+</body>
+</html>
