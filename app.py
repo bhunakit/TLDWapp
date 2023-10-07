@@ -28,7 +28,7 @@ def generate_summary(url, summary_choice):
         stream = video.streams.filter(only_audio=True).first()
         audiofilename = f"/tmp/{video.title}.mp3"
         stream.download(filename=audiofilename)
-        openai.api_key = os.getenv('OPENAI_API_KEY')
+        openai.api_key = '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'
 
         audio_file= open(audiofilename, "rb")
         transcript = openai.Audio.transcribe("whisper-1", audio_file)["text"]
@@ -46,7 +46,7 @@ def generate_summary(url, summary_choice):
                 {"role": "user", "content": prompt},
             ]
         )
-        return f"{video.title}\n" + response['choices'][0]["message"]["content"]
+        return f"{video.title}<br>" + response['choices'][0]["message"]["content"]
     
     except Exception as e:
         return f"Error: {str(e)}"
