@@ -2,7 +2,9 @@ from flask import Flask, render_template, request, jsonify
 from pytube import YouTube
 import openai
 import os
-import config
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -15,7 +17,7 @@ def generate_summary(url, summary_choice):
         stream = video.streams.filter(only_audio=True).first()
         audiofilename = f"{video.title}.mp3"
         stream.download(filename=audiofilename)
-        openai.api_key = config.openai_api_key
+        openai.api_key = os.getenv('OPENAI_API_KEY')
 
         audio_file= open(audiofilename, "rb")
         transcript = openai.Audio.transcribe("whisper-1", audio_file)["text"]
