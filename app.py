@@ -3,19 +3,30 @@ from pytube import YouTube
 import openai
 import os
 from dotenv import load_dotenv
+import re
 
 load_dotenv()
 
 app = Flask(__name__)
 
+def is_valid_youtube_url(url):
+    if re.match(r'^https?://(www\.)?youtube\.com/', url) or re.match(r'^https?://(www\.)?youtu\.be/', url):
+        return True
+    else:
+        return False
+
 def generate_summary(url, summary_choice):
+    if not is_valid_youtube_url(url):
+        return "Not URL"
+
     try:
         video = YouTube(url)
+        
         if video.length > 360: 
             return "Oops! Our AI's attention span is shorter than a sitcom episode. Keep the video under 6 minutes!"
 
         stream = video.streams.filter(only_audio=True).first()
-        audiofilename = f"{video.title}.mp3"
+        audiofilename = f"/tmp/{video.title}.mp3"
         stream.download(filename=audiofilename)
         openai.api_key = os.getenv('OPENAI_API_KEY')
 
@@ -55,7 +66,7 @@ def index():
         youtube_url = request.form.get("youtube_url")
         summary_choice = request.form.get("summary_choice")
         summary = generate_summary(youtube_url, summary_choice)
-        cleanup_files(f"{YouTube(youtube_url).title}.mp3")
+        cleanup_files(f"/tmp/{YouTube(youtube_url).title}.mp3")
         return jsonify({"summary": summary.strip()})
     return render_template("index.html")
 
