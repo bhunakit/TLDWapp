@@ -2,8 +2,16 @@ from flask import Flask, render_template, request, jsonify
 from pytube import YouTube
 import openai
 import os
+import time
 from dotenv import load_dotenv
 import re
+from supabase import create_client, Client
+
+# url = os.environ.get("SUPABASE_URL")
+# key = os.environ.get("SUPABASE_KEY")
+url = "https://paqamwxatzvsodcporme.supabase.co"
+key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhcWFtd3hhdHp2c29kY3Bvcm1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc1MzgwMjYsImV4cCI6MjAwMzExNDAyNn0.LBGAByRiM69ZxTXvkLMqnHxV5ZtzaCewxQQ4uULkmIE"
+supabase = create_client(url, key)
 
 load_dotenv()
 
@@ -16,40 +24,44 @@ def is_valid_youtube_url(url):
         return False
 
 def generate_summary(url, summary_choice):
-    if not is_valid_youtube_url(url):
-        return "Not URL"
+    time.sleep(2)
+    return "Hi"
+    # if not is_valid_youtube_url(url):
+    #     return "Not URL"
 
-    try:
-        video = YouTube(url)
+    # try:
+    #     video = YouTube(url)
         
-        if video.length > 360: 
-            return "Oops! Our AI's attention span is shorter than a sitcom episode. Keep the video under 6 minutes!"
+    #     supabase.storage.from_('audio').upload("transcript.mpeg", audiofilename)
 
-        stream = video.streams.filter(only_audio=True).first()
-        audiofilename = f"/tmp/{video.title}.mp3"
-        stream.download(filename=audiofilename)
-        openai.api_key = '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'
+    #     if video.length > 360: 
+    #         return "Oops! Our AI's attention span is shorter than a sitcom episode. Keep the video under 6 minutes!"
 
-        audio_file= open(audiofilename, "rb")
-        transcript = openai.Audio.transcribe("whisper-1", audio_file)["text"]
+    #     stream = video.streams.filter(only_audio=True).first()
+    #     audiofilename = f"/tmp/{video.title}.mpeg"
+    #     stream.download(filename=audiofilename)
+    #     openai.api_key = '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'
 
-        summary_type = ["concise and comprehensive 50 words", "five bullet points"]
+    #     audio_file= open(audiofilename, "rb")
+    #     transcript = openai.Audio.transcribe("whisper-1", audio_file)["text"]
 
-        prompt = f'''Summarize the video transcription delimited by triple quotes in {summary_type[int(summary_choice)]}.
-        \n\"\"\"{transcript}\"\"\"
-        '''
+    #     summary_type = ["concise and comprehensive 50 words", "five bullet points"]
 
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt},
-            ]
-        )
-        return f"{video.title}<br>" + response['choices'][0]["message"]["content"]
+    #     prompt = f'''Summarize the video transcription delimited by triple quotes in {summary_type[int(summary_choice)]}.
+    #     \n\"\"\"{transcript}\"\"\"
+    #     '''
+
+    #     response = openai.ChatCompletion.create(
+    #         model="gpt-3.5-turbo",
+    #         messages=[
+    #             {"role": "system", "content": "You are a helpful assistant."},
+    #             {"role": "user", "content": prompt},
+    #         ]
+    #     )
+    #     return f"{video.title}<br>" + response['choices'][0]["message"]["content"]
     
-    except Exception as e:
-        return f"Error: {str(e)}"
+    # except Exception as e:
+    #     return f"Error: {str(e)}"
 
 
 def cleanup_files(audiofilename):
@@ -66,7 +78,7 @@ def index():
         youtube_url = request.form.get("youtube_url")
         summary_choice = request.form.get("summary_choice")
         summary = generate_summary(youtube_url, summary_choice)
-        cleanup_files(f"/tmp/{YouTube(youtube_url).title}.mp3")
+        cleanup_files(f"/tmp/{YouTube(youtube_url).title}.mpeg")
         return jsonify({"summary": summary.strip()})
     return render_template("index.html")
 
