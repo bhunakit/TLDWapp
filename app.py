@@ -5,13 +5,6 @@ import os
 import time
 from dotenv import load_dotenv
 import re
-from supabase import create_client, Client
-
-# url = os.environ.get("SUPABASE_URL")
-# key = os.environ.get("SUPABASE_KEY")
-url = "https://paqamwxatzvsodcporme.supabase.co"
-key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBhcWFtd3hhdHp2c29kY3Bvcm1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc1MzgwMjYsImV4cCI6MjAwMzExNDAyNn0.LBGAByRiM69ZxTXvkLMqnHxV5ZtzaCewxQQ4uULkmIE"
-supabase = create_client(url, key)
 
 load_dotenv()
 
