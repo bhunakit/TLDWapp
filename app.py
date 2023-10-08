@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import re
 
 load_dotenv()
+openai.api_key = os.environ.get('OPENAI_API_KEY')
 
 app = Flask(__name__)
 
@@ -29,7 +30,6 @@ def generate_summary(url, summary_choice, lang):
         stream = video.streams.filter(only_audio=True).first()
         audiofilename = f"/tmp/{video.title}.mpeg"
         stream.download(filename=audiofilename)
-        openai.api_key = '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'
 
         audio_file= open(audiofilename, "rb")
         transcript = openai.Audio.transcribe("whisper-1", audio_file)["text"]

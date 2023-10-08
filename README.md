@@ -7,6 +7,7 @@ The YouTube Audio Summary App is a Flask-based web application that allows you t
 ## Features
 
 - Generate concise and comprehensive 50-word summaries or summaries in five bullet points.
+- Translate the generated summaries into different languages.
 - User-friendly web interface for easy interaction.
 - Handles YouTube URLs with audio content (video duration should be no longer than 5 minutes).
 - Automatic file cleanup to maintain a clean working directory.
@@ -19,7 +20,6 @@ Before running the app, ensure you have the following installed:
 - Flask
 - pytube
 - openai
+- You'll also need an OpenAI API key, which you can obtain from the OpenAI website. (put it in .env file in your root directory)
 
-You'll also need an OpenAI API key, which you can obtain from the OpenAI website.
-After you have the API key make sure to put it in your config file. (config.py)
 
