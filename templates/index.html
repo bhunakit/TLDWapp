@@ -53,14 +53,23 @@
     <h1 class="my-4 text-2xl">YouTube Audio Summary</h1>
     <form method="POST" class="my-4">
         <label for="youtube_url">YouTube URL:</label>
-        <input type="text" id="youtube_url" name="youtube_url" required class="border border-gray-300 rounded-md p-2 mr-2">
+        <input type="text" id="youtube_url" name="youtube_url" required class="border border-gray-300 rounded-md p-2 mr-4 ml-1">
         <label for="summary_choice">Summary Type:</label>
-        <select id="summary_choice" name="summary_choice" class="border border-gray-300 rounded-md p-2">
+        <select id="summary_choice" name="summary_choice" class="border border-gray-300 rounded-md p-2 mr-4 ml-1">
             <option value="0">Default</option>
             <option value="1">Bullet Points</option>
-        </select><br><br>
-        <input type="submit" value="Generate Summary" class="bg-blue-500 text-white rounded-md p-2 ml-2">
-    </form><br class="loading"><br class="loading">
+        </select>
+        <label for="translation_language">Translate to</label>
+        <select id="translation_language" name="translation_language" class="border border-gray-300 rounded-md p-2 ml-1">
+            <option value="en">English</option>
+            <option value="fr">Chinese</option>
+            <option value="es">Spanish</option>
+            <option value="th">Thai</option>
+            <option value="ja">Japanese</option>
+        </select>
+        <br><br>
+        <input type="submit" value="Generate Summary" class="bg-blue-500 text-white rounded-md p-2">
+    </form><br class="loading">
     <div class="loading">
         <div class="flex justify-center items-center"> 
             <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gray-900"></div>
