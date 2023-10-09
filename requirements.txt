@@ -2,3 +2,4 @@ flask
 pytube
 openai
 python-dotenv
+requests
