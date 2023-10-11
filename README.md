@@ -1,4 +1,5 @@
-# TL;DW (Too Long Didn't Watch) (personal project to check out OpenAI api)
+# TL;DW (Too Long Didn't Watch) 
+(personal project to check out OpenAI api)
 
 # YouTube Audio Summary App
 
